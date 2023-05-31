@@ -1,68 +1,49 @@
 //creo funzione per il numero random
-function numeroCasuale (min, max){
-    return Math.floor(Math.random() * (max - min) + min );
-}
-
+function numeroCasuale(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
 //creo funzione per singolo quadrato
-
-function singoloQuadrato(){
-    let quadrato = document.createElement("div"); //creo <div></div>
-    quadrato.classList.add("quadrato");// inserisco classe dentro il <div></div>
-    
+  function singoloQuadrato() {
+    let quadrato = document.createElement("div");
+    quadrato.classList.add("quadrato");
     return quadrato;
-}
-
-// recupero elemento dell' html
-let griglia = document.getElementById("griglia");
-
-
-//genero casualemente i 16 numeri delle bombe
-let arraybomb=[]   
-for(let i=0; i<16; i++){
-let number = numeroCasuale(1,100)
-arraybomb.push(number);
-}
-
-// con cliclo for creo singoli quadratini 
-for(let i = 0; i<100; i++){
-    
-    let quadrato =singoloQuadrato();
-    
-    //creo bottone per iniziare gioco
-
-    document.getElementById("bottone").addEventListener("click", function(){
-
-    //appendo quadrati nel dom 
-    griglia.append(quadrato);
-
-    //aggiungo bottone per selezionare i singoli quadrati
-    quadrato.addEventListener("click", function(){
-        
-    quadrato.innerText = i + 1;
-        //assegno ad una variabile il numero della cartella 
-    let numero = quadrato.innerText
-
-        //controllo se il numero casuale genearato al click della casella è presente nel 16 delle bombe 
-
-    if(arraybomb.includes(parseInt(numero))){
-        //se sono presenti stoppo il click e coloro la cartella rossa
-        this.classList.toggle("red");
-        quadrato.removeEventListener("click")
-    
-    } 
-    else{
-        // altrimenti coloro la cartella azzurra e continuo
-        this.classList.toggle("azzurro");
-    }    
-    
-    console.log(numero);
-    
-    console.log(arraybomb);
-
-    })
-
-    })
-} 
-    
-    
-
+  }
+//recupero griglia dal dom 
+  let griglia = document.getElementById("griglia");
+//creo array con 16 bombe da inserire nei quadratini
+  let arraybomb = [];
+  for (let i = 0; i < 16; i++) {
+    let number = numeroCasuale(1, 100);
+    arraybomb.push(number);
+  }
+//creo variabile per contare il numero di cartelle blu cliccate
+  let contatoreElse = 0;
+//collego elemento del dom con cui iniziare gioco 
+  document.getElementById("bottone").addEventListener("click", function() {
+    contatoreElse = 0;
+    //gnenero e appendo le 100 caselle nella griglia
+    for (let i = 0; i < 100; i++) {
+      let quadrato = singoloQuadrato();
+      griglia.append(quadrato);
+    //creo un click per le caselle
+      quadrato.addEventListener("click", function() {
+        quadrato.innerText = i + 1;
+        let numero = quadrato.innerText;
+        //controllo se il numero della cartella cliccatta è presente nelle array bombe
+        if (arraybomb.includes(parseInt(numero))) {
+          this.classList.toggle("red");
+          quadrato.removeEventListener("click");
+        //se è presente applico la classe red alla cartella  e stoppo il click
+        } else {
+        //se non è presente vado avanti e aggiorno il contatore delle caselle cliccate
+          this.classList.toggle("azzurro");
+          contatoreElse++;
+        }
+  
+        console.log(numero);
+        console.log(arraybomb);
+        //stampo in console il numero di cartelle cliccate
+        console.log("numero di caselle blue cliccate ", contatoreElse);
+      });
+    }
+  });
